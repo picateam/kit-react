@@ -1,0 +1,25 @@
+{
+  	"plugins": [
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-runtime",
+		["@babel/plugin-proposal-decorators", { "legacy": true }],
+		"@babel/plugin-proposal-class-properties"
+  	],
+    "presets": [
+        [
+            "@babel/env",
+            {
+              "targets": "> 0.25%, not dead"
+            },
+          ],
+        ["@babel/preset-react"]
+    ],
+    "env": {
+    	"development": {
+    		"plugins": [
+    			"react-hot-loader/babel"
+    		]
+    	}
+    }
+}
