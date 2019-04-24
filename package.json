@@ -1,6 +1,6 @@
 {
   "name": "@pica/kit-react",
-  "version": "4.0.0",
+  "version": "0.0.1",
   "description": "react starterkit",
   "main": "./pica.js",
   "scripts": {

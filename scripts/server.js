@@ -8,20 +8,19 @@ const proxy = require('http-proxy-middleware');
 
 let webpackConfig = require('./webpack.base');
 let config = require('./webpack.default');
-let port = config.port;
-let route = Array.isArray(config.route) ? config.route : [config.route];
-let apiPort = config.apiPort;
-let apiRoute = config.apiRoute;
+let port = config.server.port;
+let route = Array.isArray(config.route) ? config.server.route : [config.server.route];
+let apiPort = config.server.apiPort;
+let apiRoute = config.server.apiRoute;
 
 function addProtocal(urlString) {
-    if (!!~urlString.indexOf('http:') || !!~urlString.indexOf('https:')) {
+    if (urlString.includes('http:') || urlString.includes('https:')) {
         return urlString;
     }
-
     return 'http:' + urlString;
 }
 
-let urlObject = url.parse(addProtocal(config.webserver));
+let urlObject = url.parse(addProtocal(config.server.webserver));
 
 for (let key in webpackConfig.entry) {
     if (webpackConfig.entry.hasOwnProperty(key)) {

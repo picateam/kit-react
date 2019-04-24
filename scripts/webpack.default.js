@@ -2,46 +2,54 @@
 const path = require('path');
 const merge = require('lodash.merge');
 
-const userConfig = require('../config/index');
+const userConfig = require('../picafile.js');
 
 let utils = require('steamer-webpack-utils');
-let __basename = path.dirname(__dirname);
-let __env = process.env.NODE_ENV;
-let isProduction = __env === 'production';
 
-let srcPath = path.resolve(__basename, 'src');
-let devPath = path.resolve(__basename, 'dev');
-let distPath = path.resolve(__basename, 'dist');
-let spritePath = path.resolve(__basename, 'src/img/sprites');
+const {
+    SRC_PATH,
+    DEV_PATH,
+    DIST_PATH,
+    SPRITE_PATH,
+    ENV,
+    DIST_CDN,
+    DIST_WEBSERVER,
+    isProduction,
+} = require('./consts');
+
+const webserver = '//localhost:9000/';
+const cdn = '//localhost:8000/';
+const port = 9000;
 
 // ========================= webpack快捷配置 =========================
 // 基本情况下，你只需要关注这里的配置
 let config = {
     // ========================= webpack环境配置 =========================
-    env: __env,
+    env: ENV,
 
     // ========================= webpack路径与url =========================
     // 项目路径
     path: {
-        src: srcPath,
-        dev: devPath,
-        dist: distPath,
-        sprite: spritePath,
-        distCdn: 'cdn', // 生成cdn的目录，dist/cdn
-        distWebserver: 'webserver' // 生成webserver的目录, dist/webserver
+        src: SRC_PATH,
+        dev: DEV_PATH,
+        dist: DIST_PATH,
+        sprite: SPRITE_PATH,
+        distCdn: DIST_CDN, // 生成cdn的目录，dist/cdn
+        distWebserver: DIST_WEBSERVER // 生成webserver的目录, dist/webserver
     },
 
     // ========================= webpack服务器及路由配置 =========================
     // 开发服务器配置
-    webserver: userConfig.server.webserver,
-    cdn: userConfig.server.cdn,
-    cssCdn: userConfig.server.cssCdn || userConfig.server.cdn,
-    imgCdn: userConfig.server.imgCdn || userConfig.server.cdn,
-    port: userConfig.server.port, // port for local server
-    route: [], // proxy route, 例如: /news/
-
-    apiPort: userConfig.server.apiPort || 7000, // 后台转发端口，默认配合 steamer-plugin-mock 使用
-    apiRoute: userConfig.server.apiRoute, // 后台转发路径
+    server: {
+        webserver,
+        cdn,
+        cssCdn: cdn,
+        imgCdn: cdn,
+        port, // port for local server
+        route: [], // proxy route, 例如: /news/
+        apiPort: 7000, // 后台转发端口，默认配合 steamer-plugin-mock 使用
+        apiRoute: ['/api'], // 后台转发路径
+    },
 
     // ========================= webpack自定义配置 =========================
     useCdn: true,  // 是否使用webserver, cdn 分离 html 与其它静态资源
@@ -102,10 +110,10 @@ let config = {
 
     // webpack resolve.alias 包别名
     alias: {
-        '@': path.join(srcPath),
-        'IMG': path.join(srcPath, '/img'),
-        'CSS': path.join(srcPath, '/css'),
-        'JS': path.join(srcPath, '/js')
+        '@': path.join(SRC_PATH),
+        'IMG': path.join(SRC_PATH, '/img'),
+        'CSS': path.join(SRC_PATH, '/css'),
+        'JS': path.join(SRC_PATH, '/js')
     },
 
     // 文件名与哈希, hash, chunkhash, contenthash 与webpack的哈希配置对应
@@ -124,7 +132,7 @@ let config = {
         }
      */
     entry: utils.filterJsFileByCmd(utils.getJsEntry({
-        srcPath: path.join(srcPath, 'page'),
+        srcPath: path.join(SRC_PATH, 'page'),
         fileName: 'main',
         extensions: ['js', 'jsx', 'ts', 'tsx'],
         level: 1
@@ -150,7 +158,7 @@ let config = {
      */
 
     html: utils.filterHtmlFileByCmd(utils.getHtmlEntry({
-        srcPath: path.join(srcPath, 'page'),
+        srcPath: path.join(SRC_PATH, 'page'),
         level: 1
     })),
 
@@ -169,8 +177,26 @@ let config = {
         ]
      */
     sprites: utils.getSpriteEntry({
-        srcPath: spritePath
-    })
+        srcPath: SPRITE_PATH
+    }),
+
+    // webpack output
+    output: {},
+
+    // webpack module
+    module: {},
+
+    // webpack resolve
+    resolve: {},
+
+    // webpack plugins
+    plugins: [],
+
+    // webpack externals
+    externals: isProduction ? {
+        'react': 'React',
+        'react-dom': 'ReactDOM',
+    } : {},
 };
 
 config = merge({}, config, userConfig);

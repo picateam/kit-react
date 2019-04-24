@@ -14,7 +14,7 @@ let baseConfig = {
     context: config.path.src,
     entry: config.entry,
     output: {
-        publicPath: isProduction ? config.cdn : config.webserver,
+        publicPath: isProduction ? config.server.cdn : config.server.webserver,
         path: isProduction ? config.path.dist : config.path.dev,
         filename: `js/${config.chunkhashName}.js`,
         chunkFilename: 'chunk/' + config.chunkhashName + '.js'
@@ -65,18 +65,16 @@ baseConfig.module.rules = baseConfigRules;
 baseConfig.plugins = baseConfigPlugins;
 baseConfig.optimization = require('./optimization')(config, webpack);
 
-// console.log(rules, plugins);
-
-/** *********** base 与 user config 合并 *************/
+/** *********** base 与 user config 合并 *********** **/
 let userConfig = {
-    output: config.getOutput(),
-    module: config.getModule(),
-    resolve: config.getResolve(),
-    externals: config.getExternals(),
-    plugins: config.getPlugins(),
+    output: config.output,
+    module: config.module,
+    resolve: config.resolve,
+    externals: config.externals,
+    plugins: config.plugins,
 };
 
-let otherConfig = config.getOtherOptions();
+let otherConfig = typeof config.getOtherOptions === 'function' ? config.getOtherOptions() : {};
 
 for (let key in otherConfig) {
     if (otherConfig.hasOwnProperty(key)) {

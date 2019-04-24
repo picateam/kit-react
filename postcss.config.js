@@ -1,18 +1,21 @@
-let config = require('./pica');
-let PostcssImport = require('postcss-import');
-let Autoprefixer = require('autoprefixer');
-let PostcssAsset = require('postcss-assets');
+const PostcssImport = require('postcss-import');
+const Autoprefixer = require('autoprefixer');
+const PostcssAsset = require('postcss-assets');
+
+const {
+    SRC_PATH
+} = require('./scripts/consts');
 
 module.exports = {
     plugins: [
         PostcssImport({
-            path: [config.webpack.path.src]
+            path: [SRC_PATH]
         }),
         Autoprefixer({
             browsers: ['iOS 7', '> 0.1%', 'android 2.1']
         }),
         PostcssAsset({
-            loadPaths: [config.webpack.path.src]
+            loadPaths: [SRC_PATH]
         })
     ]
 };

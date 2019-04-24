@@ -6,7 +6,6 @@ if (!isProduction) {
     require('./server');
 }
 else if (isProduction) {
-
     compilerRun(require('./webpack.base'));
 }
 
