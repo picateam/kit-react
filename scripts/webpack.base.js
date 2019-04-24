@@ -31,6 +31,7 @@ let baseConfig = {
         extensions: [
             '.ts', '.tsx', '.js', '.jsx', '.css', '.scss', 'sass', '.less', '.styl',
             '.png', '.jpg', '.jpeg', '.ico', '.ejs', '.pug', '.art', '.handlebars', 'swf', 'svg',
+            'ttf', 'otf', 'woff', 'eot'
         ],
         // alias: {}
     },

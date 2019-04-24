@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const proxy = require('http-proxy-middleware');
+const utils = require('@pica/webpack-utils');
 
 let webpackConfig = require('./webpack.base');
 let config = require('./webpack.default');
@@ -13,14 +14,7 @@ let route = Array.isArray(config.route) ? config.server.route : [config.server.r
 let apiPort = config.server.apiPort;
 let apiRoute = config.server.apiRoute;
 
-function addProtocal(urlString) {
-    if (urlString.includes('http:') || urlString.includes('https:')) {
-        return urlString;
-    }
-    return 'http:' + urlString;
-}
-
-let urlObject = url.parse(addProtocal(config.server.webserver));
+let urlObject = url.parse(utils.addProtocal(config.server.webserver));
 
 for (let key in webpackConfig.entry) {
     if (webpackConfig.entry.hasOwnProperty(key)) {

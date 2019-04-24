@@ -4,7 +4,7 @@ const merge = require('lodash.merge');
 
 const userConfig = require('../picafile.js');
 
-let utils = require('steamer-webpack-utils');
+const utils = require('@pica/webpack-utils');
 
 const {
     SRC_PATH,
@@ -133,8 +133,6 @@ let config = {
      */
     entry: utils.filterJsFileByCmd(utils.getJsEntry({
         srcPath: path.join(SRC_PATH, 'page'),
-        fileName: 'main',
-        extensions: ['js', 'jsx', 'ts', 'tsx'],
         level: 1
     })),
 
